@@ -1,0 +1,298 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" style="color:white;">Candidate Manager</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" (click)="onOpenModal(null, 'add')">Add Candidate <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+      <form class="form-inline my-2 my-lg-0">
+        <input type="search" (ngModelChange)="searchCandidates(key.value)" #key="ngModel" ngModel
+               name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search candidates..." required>
+
+      </form>
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="trends">Trends <span class="sr-only">(current)</span></a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="logs">Logs <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" (click)="signOut()">Sign Out <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+    <router-outlet></router-outlet>
+
+  </div>
+</nav>
+<div class="container" id="main-container">
+  <div class="row">
+    <div *ngFor="let candidate of candidates" class="col-md-6 col-xl-6">
+      <!--  This is the Card body -->
+      <div class="card m-b-30 bg-light">
+        <div class="card-body row">
+
+          <div class="col-6 card-title align-self-center mb-0">
+            <h5>{{candidate?.name}}</h5>
+            <p class="m-2"> Joining Location : {{candidate?.location}}</p>
+            <p class="m-2">Training Batch :{{candidate?.batch}}</p>
+            <p class="m-2">Institute : {{candidate?.institute}}</p>
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-light"><i class="fa fa-envelope float-right"></i>Email : <a href="#">{{candidate?.email}}</a></li>
+          <li class="list-group-item bg-light"><i class="fa fa-phone float-right"></i>Phone : {{candidate?.mobno}}</li>
+        </ul>
+        <div class="card-body">
+          <div class="float-right btn-group btn-group-sm">
+            <button type="button" (click)="onOpenModal(candidate, 'edit')" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+            <button type="button" (click)="onOpenModal(candidate, 'delete')" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></button>
+            <button type="button" (click)="onOpenModal(candidate, 'view')" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-user"></i></button>
+          </div>
+
+        </div>
+      </div>
+      <!--  Card Body Ends-->
+    </div>
+  </div>
+
+  <!-- Add Candidate -->
+  <div class="modal fade" id="addCandidateModal" tabindex="-1" role="dialog" aria-labelledby="addCandidateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCandidateModalLabel">Add Candidate</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #addForm="ngForm" (ngSubmit)="onAddCandidate(addForm)" class="was-validated">
+
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" pattern="[a-zA-Z\s]+" ngModel name="name" class="form-control" id="name" placeholder="Name"
+                     required>
+              <div class="valid-feedback">Valid Name.</div>
+              
+            </div>
+
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" ngModel name="email" class="form-control" id="email" placeholder="Email" required>
+              <div class="valid-feedback">Valid Email</div>
+             
+            </div>
+            <div class="form-group">
+              <label for="mobno">Phone No.</label>
+              <input type="text" ngModel name="mobno" data-validation="number" data-validation-allowing="number , positive" maxlength="10" minlength="10" pattern="\d*" class="form-control" id="mobno" placeholder="Phone Number" required>
+              <div class="valid-feedback">Valid</div>
+              
+            </div>
+            <div class="form-group">
+              <label for="institue">Institute</label>
+              <input type="text" ngModel name="institute" class="form-control" id="institue" placeholder="Institute Name" required>
+              
+              
+            </div>
+
+            <div class="form-group">
+              <label for="joining_date">Joining Date</label>
+              <input type="text" ngModel name="joining_date" class="form-control" id="joining_date" placeholder="DD/MM/YYYY" required>
+              
+            </div>
+            <div class="form-group">
+              <label for="location">Joining Location</label>
+              <input type="text" ngModel name="location" class="form-control" id="location" placeholder="Joining Location" required>
+             
+            </div>
+            <div class="form-group">
+              <label for="skillset">Skillset</label>
+              <input type="text" ngModel name="skillset" class="form-control" id="skillset" placeholder="Skillset" required>
+              
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <input type="text" ngModel name="description" class="form-control" id="description" placeholder="Description ">
+            </div>
+
+            <div class="form-group">
+              <label for="feedback">Feedback</label>
+              <input type="text" ngModel name="feedback" class="form-control" id="feedback" placeholder="Feedback ">
+            </div>
+            <div class="form-group">
+              <label for="job_title">Job Title</label>
+              <input type="text" ngModel name="job_title" class="form-control" id="job_title" placeholder="Job Title " required>
+              
+            </div>
+            <div class="form-group">
+              <label for="batch">Training Batch</label>
+              <input type="text" ngModel name="batch" class="form-control" id="batch" placeholder="Eg. March 2021 " required>
+              
+            </div>
+
+
+
+
+            <div class="modal-footer">
+              <button type="button" id="add-candidate-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--- Edit Candidate -->
+  <div class="modal fade" id="updateCandidateModal" tabindex="-1" role="dialog" aria-labelledby="candidateEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateCandidateModalLabel">Edit Candidate {{editCandidate?.name}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #editForm="ngForm" class="was-validated">
+
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" pattern="[a-zA-Z\s]+" ngModel="{{editCandidate?.name}}" name="name" class="form-control" id="name" placeholder="Name" required>
+              <div class="valid-feedback">Valid Name.</div>
+              
+            </div>
+            <input type="hidden" ngModel="{{editCandidate?.id}}" name="id" class="form-control" id="id" placeholder="id">
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" ngModel="{{editCandidate?.email}}" name="email" class="form-control" id="email" placeholder="Email" required>
+              <div class="valid-feedback">Valid Email</div>
+              
+            </div>
+            <div class="form-group">
+              <label for="mobno">Phone No.</label>
+              <input type="text" data-validation="number" data-validation-allowing="number , positive" maxlength="10" minlength="10" pattern="\d*" ngModel="{{editCandidate?.mobno}}" name="mobno" class="form-control" id="mobno" placeholder="Phone Number" required>
+              <div class="valid-feedback">Valid</div>
+              
+            </div>
+            <div class="form-group">
+              <label for="institue">Institute</label>
+              <input type="text" ngModel="{{editCandidate?.institute}}" name="institute" class="form-control" id="institue" placeholder="Institute Name" required>
+             
+            </div>
+
+            <div class="form-group">
+              <label for="joining_date">Joining Date</label>
+              <input type="text" ngModel="{{editCandidate?.joining_date}}" name="joining_date" class="form-control" id="joining_date" placeholder="DD/MM/YYYY" required>
+              
+            </div>
+            <div class="form-group">
+              <label for="location">Joining Location</label>
+              <input type="text" ngModel="{{editCandidate?.location}}" name="location" class="form-control" id="location" placeholder="Joining Location" required>
+             
+            </div>
+            <div class="form-group">
+              <label for="skillset">Skillset</label>
+              <input type="text" ngModel="{{editCandidate?.skillset}}" name="skillset" class="form-control" id="skillset" placeholder="Skillset" required>
+              
+            </div>
+           
+            <div class="form-group">
+              <label for="feedback">Feedback</label>
+              <input type="text" ngModel="{{editCandidate?.feedback}}" name="feedback" class="form-control" id="feedback" placeholder="Feedback ">
+            </div>
+            <div class="form-group">
+              <label for="job_title">Job Title</label>
+              <input type="text" ngModel="{{editCandidate?.job_title}}" name="job_title" class="form-control" id="job_title" placeholder="Job Title ">
+              <
+            </div>
+            <div class="form-group">
+              <label for="batch">Training Batch</label>
+              <input type="text" ngModel="{{editCandidate?.batch}}" name="batch" class="form-control" id="batch" placeholder="Eg. March 2021 ">
+             
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" id="add-candidate-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button (click)="onUpdateCandidate(editForm.value )" type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Candidate -->
+  <div class="modal fade" id="deleteCandidateModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModelLabel">Delete Candidate</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete Candidate {{deleteCandidate?.name}} ?</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button (click)="onDeleteCandidate(deleteCandidate?.id)" class="btn btn-secondary" data-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!--- View Candidate Details -->
+  <div class="modal fade" id="viewCandidateModal" tabindex="-1" role="dialog" aria-labelledby="viewModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewModelLabel">View Candidate </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Name : {{viewCandidate?.name}}</p>
+          <p>Accolite ID : {{viewCandidate?.email}}</p>
+          <p>Phone Number : {{viewCandidate?.mobno}}</p>
+          <p>Institute : {{viewCandidate?.institute}}</p>
+          <p>Joining Location : {{viewCandidate?.location}}</p>
+          <p>Joining Date : {{viewCandidate?.joining_date}}</p>
+          <p>Skillset : {{viewCandidate?.skillset}}</p>
+          <p>Job Title : {{viewCandidate?.job_title}}</p>
+          <p>Training Batch : {{viewCandidate?.batch}}</p>
+          <p>Feedback : {{viewCandidate?.feedback}}</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Notification for no employees -->
+<div *ngIf="candidates?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+  <div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">EMPTY!</h4>
+    <p>No Candidates were found.</p>
+  </div>
+</div>
+
+
+

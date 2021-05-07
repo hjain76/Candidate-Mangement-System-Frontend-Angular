@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" style="color:white;">Trends Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/crud">BACK <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div style="display:flex; justify-content:center; margin:30px">
+  <input style="margin:10px" class="btn btn-info" (click)="ShowTrend('trend1')" type="button" value="Skills">
+  <input style="margin:10px" class="btn btn-info" (click)="ShowTrend('trend2')" type="submit" value="Institute">
+  <input style="margin:10px" class="btn btn-info" (click)="ShowTrend('trend3')" type="reset" value="Location">
+</div>
+
+<div style=" justify-content:center; width:100px; height:100px" *ngIf="trend1">
+  <ngx-charts-pie-chart
+        [results]="skills"
+        [legend]="true"
+        [legendTitle]="'Skills'"
+        [view]="[1400,600]"
+        [labels]="true"
+         (select)="onShow($event)">
+
+  </ngx-charts-pie-chart>
+</div>
+
+
+
+
+<div style="display: flex;justify-content: center; " *ngIf="trend2">
+  <ngx-charts-bar-vertical
+                           [view]="[700, 400]"
+                           [scheme]="colorScheme"
+                           [results]="institute"
+                           [gradient]="gradient"
+                           [xAxis]="showXAxis"
+                           [yAxis]="showYAxis"
+                           [legend]="showLegend"
+                           [showXAxisLabel]="showXAxisLabel"
+                           [showYAxisLabel]="showYAxisLabel"
+                           [xAxisLabel]="xAxisLabel"
+                           [yAxisLabel]="yAxisLabel"
+                           (select)="onShow($event)">
+  </ngx-charts-bar-vertical>
+</div>
+
+<div style="display:flex; justify-content:center;" *ngIf="trend3">
+  <ngx-charts-pie-grid
+                       [view]="[700, 400]"
+
+                       [scheme]="colorScheme"
+
+                       [results]="locations"
+                       [designatedTotal] ="8"
+                       >
+                                 
+  </ngx-charts-pie-grid>
+</div>
+<router-outlet></router-outlet>

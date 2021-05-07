@@ -1,0 +1,50 @@
+.container {
+  background-color: lavender;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  padding: 2rem 2rem;
+}
+
+
+
+.btn1 {
+  border: 3px solid DarkSlateGray;
+  background: none;
+  padding: 10px 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+  .btn1:hover {
+    background-color: DarkSlateGray;
+    color: white;
+  }
+
+.img {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+  .img img {
+    width: 200px;
+    height: 200px;
+  }
+
+.login-container {
+  display: flex;
+  text-align: center;
+  flex-direction: row;
+  
+  align-items: center;
+}
+
+
+
+.title {
+  font-size: 3rem;
+}
+
